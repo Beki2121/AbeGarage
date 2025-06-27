@@ -1,9 +1,11 @@
 import React from "react";
 import "./Address.css"
 import ContactForm from '../Email/ContactForm'
-
+import { useTranslation } from 'react-i18next';
 
 function Address() {
+  const { t } = useTranslation();
+
   return (
     <div className="container">
       <div className="row">
@@ -15,9 +17,9 @@ function Address() {
 
         <div className="info-column col-lg-6">
           <div className="inner-column">
-            <h4>Our Address</h4>
+            <h4>{t('Our Address')}</h4>
             <div className="text">
-            Visit us at our convenient location listed below for all your automotive needs.
+            {t('Visit us at our convenient location listed below for all your automotive needs.')}
             </div>
             <ul>
               <li>
@@ -26,7 +28,7 @@ function Address() {
                 <i className="flaticon-pin"></i>
                 </div>
                 <div>
-                <h5>Address:</h5> 123 Main St, Evangadi City, MD 20601
+                <h5>{t('Address')}:</h5> {t('123 Main St, Evangadi City, MD 20601')}
                 </div>
                 </div>
               </li>
@@ -37,7 +39,7 @@ function Address() {
                     <i className="flaticon-email"></i>
                   </div>
                   <div>
-                  <h5>email:</h5> contact@abegarage.com
+                  <h5>{t('email')}:</h5> contact@abegarage.com
                   </div>
                 </div>
               </li>
@@ -47,7 +49,7 @@ function Address() {
                 <i className="flaticon-phone"></i>
                 </div>
                 <div>
-                <h5>phone:</h5> 1800 456 7890 / 1254 897 3654
+                <h5>{t('phone')}:</h5> 1800 456 7890 / 1254 897 3654
                 </div>
                 </div>
               </li>

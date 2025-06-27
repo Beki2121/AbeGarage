@@ -30,7 +30,7 @@ function Header(props) {
   };
 
   const logOut = () => {
-    if (window.confirm("Are you sure you want to logout?")) {
+    if (window.confirm(t('Are you sure you want to logout?'))) {
       loginService.logOut();
       setIsLogged(false);
       navigate("/login");
@@ -61,9 +61,8 @@ function Header(props) {
           <div className="auto-container">
             <div className="inner-container">
               <div className="left-column">
-                <div className="text">{t('Relax while we get you back on the road')}</div>
                 <div className="office-hour">
-                  Monday - Saturday 7:00AM - 6:00PM
+                  {t('Monday - Saturday 7:00AM - 6:00PM')}
                 </div>
               </div>
               <div className="right-column d-flex">
@@ -76,20 +75,20 @@ function Header(props) {
                     <span className="welcome-admin-text">
                       <strong>
                         {isAdmin
-                          ? "Welcome Admin!"
-                          : `Welcome ${employee?.employee_first_name || ""}!`}
+                          ? t('Welcome Admin!')
+                          : `${t('Welcome')} ${employee?.employee_first_name || ""}!`}
                       </strong>
                     </span>
                   </div>
                 ) : (
                   <div className="phone-number">
-                    Schedule Appointment: <strong>1800 456 7890</strong>
+                    {t('Schedule Appointment')}: <strong>1800 456 7890</strong>
                   </div>
                 )}
                 {isLogged && (
                   <div className="employee_profile">
                     <Avatar
-                      name={`${employee?.employee_first_name} ${employee?.employee_last_name}`}
+                      name={employee?.employee_first_name?.charAt(0) || "U"}
                       size="50"
                       textSizeRatio={2}
                       color="#EE100E"
@@ -136,20 +135,20 @@ function Header(props) {
                           }
                         >
                           <Dropdown.Item as={Link} to="/">
-                            Home
+                            {t('Home')}
                           </Dropdown.Item>
                           <Dropdown.Item as={Link} to="/about">
-                            About Us
+                            {t('About Us')}
                           </Dropdown.Item>
                           <Dropdown.Item as={Link} to="/services">
-                            Services
+                            {t('Services')}
                           </Dropdown.Item>
                           <Dropdown.Item as={Link} to="/contact">
-                            Contact Us
+                            {t('Contact Us')}
                           </Dropdown.Item>
                           {isLogged && isAdmin && (
                             <Dropdown.Item as={Link} to="/admin">
-                              Dashboard
+                              {t('Dashboard')}
                             </Dropdown.Item>
                           )}
                         </DropdownButton>
@@ -164,20 +163,20 @@ function Header(props) {
                       >
                         <ul className="navigation navbar-nav">
                           <li className="dropdown">
-                            <Link to="/">Home</Link>
+                            <Link to="/">{t('Home')}</Link>
                           </li>
                           <li className="dropdown">
-                            <Link to="/about">About Us</Link>
+                            <Link to="/about">{t('About Us')}</Link>
                           </li>
                           <li className="dropdown">
-                            <Link to="/services">Services</Link>
+                            <Link to="/services">{t('Services')}</Link>
                           </li>
                           <li>
-                            <Link to="/contact">Contact Us</Link>
+                            <Link to="/contact">{t('Contact Us')}</Link>
                           </li>
                           {isLogged && isAdmin && (
                             <li className="dropdown">
-                              <Link to="/admin">Dashboard</Link>
+                              <Link to="/admin">{t('Dashboard')}</Link>
                             </li>
                           )}
                         </ul>
@@ -193,13 +192,13 @@ function Header(props) {
                       className="theme-btn btn-style-one blue"
                       onClick={logOut}
                     >
-                      Log out
+                      {t('Log out')}
                     </Link>
                   </div>
                 ) : (
                   <div className="signing-btn">
                     <Link to="/login" className="theme-btn btn-style-one">
-                      Login
+                      {t('Login')}
                     </Link>
                   </div>
                 )}

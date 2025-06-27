@@ -1,6 +1,9 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 function Footer() {
+  const { t } = useTranslation();
+
   return (
     <div>
       <footer className="main-footer">
@@ -14,7 +17,7 @@ function Footer() {
                       <span className="flaticon-pin"></span>
                     </div>
                     <div className="text">
-                      123 Main St, <br /> Evangadi City, MD 20601
+                      {t('123 Main St, Evangadi City, MD 20601')}
                     </div>
                   </div>
                 </div>
@@ -27,7 +30,7 @@ function Footer() {
                       <span className="flaticon-email"></span>
                     </div>
                     <div className="text">
-                      Email us : <br />{" "}
+                      {t('Email us')} : <br />{" "}
                       <a href="mailto:contact.contact@autorex.com">
                         contact@abegarage.com
                       </a>
@@ -43,7 +46,7 @@ function Footer() {
                       <span className="flaticon-phone"></span>
                     </div>
                     <div className="text">
-                      Call us on : <br />
+                      {t('Call us on')} : <br />
                       <strong>+ 1800 456 7890</strong>
                     </div>
                   </div>
@@ -69,10 +72,7 @@ function Footer() {
                       </a>
                     </div>
                     <div className="text">
-                      EURODIESEL PARMA S.p.A. is your trusted partner for
-                      advanced diesel and fleet solutions. We deliver excellence
-                      in service, diagnostics, and parts for leading brands.
-                      Your performance, our passion.
+                      {t('EURODIESEL PARMA S.p.A. is your trusted partner for advanced diesel and fleet solutions. We deliver excellence in service, diagnostics, and parts for leading brands. Your performance, our passion.')}
                     </div>
                   </div>
                 </div>
@@ -81,17 +81,17 @@ function Footer() {
                   <div className="row">
                     <div className="col-md-6">
                       <div className="widget widget_links">
-                        <h4 className="widget_title">Useful Links</h4>
+                        <h4 className="widget_title">{t('Useful Links')}</h4>
                         <div className="widget-content">
                           <ul className="list">
                             <li>
-                              <a href="/">Home</a>
+                              <a href="/">{t('Home')}</a>
                             </li>
                             <li>
-                              <a href="/about">About Us</a>
+                              <a href="/about">{t('About Us')}</a>
                             </li>
                             <li>
-                              <a href="/contact">Contact Us</a>
+                              <a href="/contact">{t('Contact Us')}</a>
                             </li>
                           </ul>
                         </div>
@@ -99,23 +99,23 @@ function Footer() {
                     </div>
                     <div className="col-md-6">
                       <div className="widget widget_links">
-                        <h4 className="widget_title">Our Services</h4>
+                        <h4 className="widget_title">{t('Our Services')}</h4>
                         <div className="widget-content">
                           <ul className="list">
                             <li>
-                              <a href="#">Performance Upgrade</a>
+                              <a href="#">{t('Performance Upgrade')}</a>
                             </li>
                             <li>
-                              <a href="#">Transmission Service</a>
+                              <a href="#">{t('Transmission Services')}</a>
                             </li>
                             <li>
-                              <a href="#">Break Repair & Service</a>
+                              <a href="#">{t('Break Repair & Service')}</a>
                             </li>
                             <li>
-                              <a href="#">Engine Service & Repair</a>
+                              <a href="#">{t('Engine Service & Repair')}</a>
                             </li>
                             <li>
-                              <a href="#">Tyre & Wheels</a>
+                              <a href="#">{t('Tyre & Wheels')}</a>
                             </li>
                           </ul>
                         </div>
@@ -131,11 +131,10 @@ function Footer() {
         <div className="auto-container">
           <div className="footer-bottom">
             <div className="copyright-text">
-              © 2024 <a href="#">EURODIESEL PARMA S.p.A.</a>. Excellence in
-              Diesel Service & Fleet Solutions.
+              © 2024 <a href="#">EURODIESEL PARMA S.p.A.</a>. {t('Excellence in Diesel Service & Fleet Solutions.')}
             </div>
             <div className="text">
-              Powered by <a href="#">Eurodiesel IT</a>
+              {t('Powered by')} <a href="#">Eurodiesel IT</a>
             </div>
           </div>
         </div>

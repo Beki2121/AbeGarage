@@ -4,32 +4,32 @@ import { useTranslation } from 'react-i18next';
 const serviceCards = [
   {
     icon: 'flaticon-tire',
-    title: 'Riparazione e servizio pneumatici',
+    title: 'Tyre & Wheels',
     desc: 'desc_riparazione_pneumatici',
   },
   {
     icon: 'flaticon-dashboard',
-    title: 'Controllo e taratura tachigrafo',
+    title: 'Tachograph Control',
     desc: 'desc_controllo_tachigrafo',
   },
   {
     icon: 'flaticon-download',
-    title: 'Scarico dati tachigrafo',
+    title: 'Tachograph Data Download',
     desc: 'desc_scarico_tachigrafo',
   },
   {
     icon: 'flaticon-trailer',
-    title: 'Riparazione rimorchi',
+    title: 'Trailer Repair',
     desc: 'desc_riparazione_rimorchi',
   },
   {
     icon: 'flaticon-truck',
-    title: 'Riparazione veicoli industriali',
+    title: 'Industrial Vehicle Repair',
     desc: 'desc_riparazione_veicoli_industriali',
   },
   {
     icon: 'flaticon-bus',
-    title: 'Riparazione bus',
+    title: 'Bus Repair',
     desc: 'desc_riparazione_bus',
   },
 ];

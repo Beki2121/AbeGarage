@@ -143,6 +143,17 @@
   letter-spacing: 1px;
 }
 
+/* Office hours text styling */
+.office-hour {
+  background-color: #EE100E;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+  display: inline-block;
+}
+
 @media screen and (max-width: 1410px) {
   .drop-down {
     display: block;
