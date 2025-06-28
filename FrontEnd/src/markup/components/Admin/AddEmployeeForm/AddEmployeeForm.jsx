@@ -65,19 +65,20 @@ function AddEmployeeForm() {
 
     setLoading(true);
     try {
-      const data = await employeeService.createEmployee(
+      const response = await employeeService.createEmployee(
         formData,
         loggedInEmployeeToken
       );
 
-      if (data.status === 200) {
+      // Check if the request was successful (status 200-299)
+      if (response.status >= 200 && response.status < 300) {
         setServerError("");
-        setServerSuccess(data.data);
+        setServerSuccess("Employee added successfully! Redirecting to employees list...");
         setTimeout(() => {
           navigate("/admin/employees");
         }, 2000);
       } else {
-        setServerError(data.data.msg || "Failed to add the employee!");
+        setServerError("Failed to add the employee!");
       }
     } catch (error) {
       const resMessage =

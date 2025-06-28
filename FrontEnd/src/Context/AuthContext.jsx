@@ -15,24 +15,46 @@ export const AuthProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [user, setUser] = useState(null);
   const [employee, setEmployee] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchAuth = async () => {
-      const loggedInEmployee = await getAuth();
-      if (loggedInEmployee?.employee_token) {
-        setIsLogged(true);
-        if (loggedInEmployee.employee_role === 3) {
-          setIsAdmin(true);
+      try {
+        const loggedInEmployee = await getAuth();
+        if (loggedInEmployee?.employee_token) {
+          setIsLogged(true);
+          if (loggedInEmployee.employee_role === 3) {
+            setIsAdmin(true);
+          }
+          setEmployee(loggedInEmployee);
+          setUser(loggedInEmployee);
         }
-        setEmployee(loggedInEmployee);
-        setUser(loggedInEmployee);
+      } catch (error) {
+        console.error('Error fetching auth:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchAuth();
   }, []);
 
-  const value = { isLogged, isAdmin, setIsAdmin, setIsLogged, employee, user };
+  const value = { 
+    isLogged, 
+    isAdmin, 
+    setIsAdmin, 
+    setIsLogged, 
+    employee, 
+    user, 
+    isLoading,
+    logout: () => {
+      localStorage.removeItem('employee');
+      setIsLogged(false);
+      setIsAdmin(false);
+      setEmployee(null);
+      setUser(null);
+    }
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

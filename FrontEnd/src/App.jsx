@@ -85,17 +85,42 @@ const App = () => {
             </PrivateAuthRoute>
           }
         />
-        <Route path="/admin/order/:ID/:vID" element={<NewOrder />} />
+        <Route 
+          path="/admin/order/:ID/:vID" 
+          element={
+            <PrivateAuthRoute roles={[3]}>
+              <NewOrder />
+            </PrivateAuthRoute>
+          }
+        />
         <Route
           path="/admin/order-single/:customer_id"
-          element={<SingleOrderPage />}
+          element={
+            <PrivateAuthRoute roles={[1, 2, 3]}>
+              <SingleOrderPage />
+            </PrivateAuthRoute>
+          }
         />
-        <Route path="/admin/create-order" element={<CreateOrderPage />} />
-        <Route path="admin/order/:orderId" element={<UpdateOrderPage />} />
+        <Route 
+          path="/admin/create-order" 
+          element={
+            <PrivateAuthRoute roles={[3]}>
+              <CreateOrderPage />
+            </PrivateAuthRoute>
+          }
+        />
+        <Route 
+          path="admin/order/:orderId" 
+          element={
+            <PrivateAuthRoute roles={[3]}>
+              <UpdateOrderPage />
+            </PrivateAuthRoute>
+          }
+        />
         <Route
           path="/admin/add-customer"
           element={
-            <PrivateAuthRoute roles={[1, 2, 3]}>
+            <PrivateAuthRoute roles={[3]}>
               <CustomerForm />
             </PrivateAuthRoute>
           }
@@ -108,12 +133,30 @@ const App = () => {
             </PrivateAuthRoute>
           }
         />
-        <Route path="/admin/customers/:id" element={<Vehicle />} />
+        <Route 
+          path="/admin/customers/:id" 
+          element={
+            <PrivateAuthRoute roles={[1, 2, 3]}>
+              <Vehicle />
+            </PrivateAuthRoute>
+          }
+        />
         <Route
           path="/admin/edit-customer/:customerId"
-          element={<EditCustomer />}
+          element={
+            <PrivateAuthRoute roles={[3]}>
+              <EditCustomer />
+            </PrivateAuthRoute>
+          }
         />
-        <Route path="/admin/edit-vehicle/:id" element={<EditVehicle />} />
+        <Route 
+          path="/admin/edit-vehicle/:id" 
+          element={
+            <PrivateAuthRoute roles={[3]}>
+              <EditVehicle />
+            </PrivateAuthRoute>
+          }
+        />
         <Route
           path="/admin/add-employee"
           element={
@@ -140,18 +183,22 @@ const App = () => {
         />
         <Route
           path="/admin/employee-profile/:id"
-          element={<EmployeeProfile />}
+          element={
+            <PrivateAuthRoute roles={[1, 2, 3]}>
+              <EmployeeProfile />
+            </PrivateAuthRoute>
+          }
         />
         <Route
           path="/admin/services"
           element={
-            <PrivateAuthRoute roles={[3]}>
+            <PrivateAuthRoute roles={[1, 2, 3]}>
               <ServicePage />
             </PrivateAuthRoute>
           }
         />
        <Route path="/admin/order-detail/:id" element={
-          <PrivateAuthRoute roles={[3]}>
+          <PrivateAuthRoute roles={[1, 2, 3]}>
             <OrderDetail />
           </PrivateAuthRoute>
         } />

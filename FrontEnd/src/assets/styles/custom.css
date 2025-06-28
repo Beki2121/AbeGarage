@@ -136,4 +136,33 @@ a {
   font-size: 3rem !important;
   display: inline-block;
 }
+
+/* Admin Dashboard Card Read More Styling - Using h5 style */
+.service-block-one .inner-box .read-more {
+  color: #ffffff !important; /* White color for visibility on dark cards */
+  font-weight: normal;
+  line-height: 1.25em;
+  margin: 0px;
+  background: none;
+  font-size: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.service-block-one .inner-box .read-more:hover {
+  color: #f0f0f0 !important; /* Light gray on hover */
+  text-decoration: none;
+}
+
+/* Admin Dashboard Card Icons - Reduced Size */
+.service-block-one .inner-box .icon .flaticon-car,
+.service-block-one .inner-box .icon .flaticon-add,
+.service-block-one .inner-box .icon .flaticon-mechanic,
+.service-block-one .inner-box .icon .flaticon-men,
+.service-block-one .inner-box .icon .flaticon-customer-service,
+.service-block-one .inner-box .icon .flaticon-car-engine,
+.service-block-one .inner-box .icon .flaticon-deadline,
+.service-block-one .inner-box .icon .flaticon-badge {
+  font-size: 0.6em !important; /* Extremely small size */
+}
   

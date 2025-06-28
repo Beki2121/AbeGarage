@@ -58,15 +58,22 @@ function AddCustomerForm() {
     }
 
     try {
-      const data = await customerService.createCustomer(customerdata, token);
-      setServerMsg("Redirecting To Customers page...");
-      setTimeout(() => {
-        navigate("/admin/customers");
+      const response = await customerService.createCustomer(customerdata, token);
+      
+      // Check if the request was successful (status 200-299)
+      if (response.status >= 200 && response.status < 300) {
+        setServerMsg("Customer added successfully! Redirecting to customers list...");
+        setTimeout(() => {
+          navigate("/admin/customers");
+          setSpinner(false);
+        }, 2000);
+      } else {
+        setServerError("Failed to add the customer!");
         setSpinner(false);
-      }, 1000);
+      }
     } catch (error) {
-      console.log(error.response.data.msg);
-      setServerError(error?.response?.data?.msg);
+      console.log(error.response?.data?.msg);
+      setServerError(error?.response?.data?.msg || "Failed to add customer");
       setSpinner(false);
     }
   };

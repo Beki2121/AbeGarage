@@ -42,12 +42,13 @@ CREATE TABLE IF NOT EXISTS `company_roles` (
   UNIQUE (company_role_name)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `common_services` (
-  `service_id` int(11) NOT NULL AUTO_INCREMENT,
-  `service_name` varchar(255) NOT NULL,
-  `service_description` TEXT,
-  PRIMARY KEY (service_id)
-) ENGINE=InnoDB;
+CREATE TABLE common_services (
+    service_id INT AUTO_INCREMENT PRIMARY KEY,
+    service_name VARCHAR(100) NOT NULL,
+    service_description VARCHAR(255) NOT NULL,
+    category_id INT DEFAULT NULL, -- Optional: for service categories
+    price DECIMAL(10,2) DEFAULT NULL -- Optional: for service price
+);
 
 -- Employee tables 
 CREATE TABLE IF NOT EXISTS `employee` (

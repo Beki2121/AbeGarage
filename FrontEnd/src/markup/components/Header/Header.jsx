@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import loginService from "../../../services/login.service";
 import { useAuth } from "../../../Context/AuthContext";
 import Avatar from "react-avatar";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -10,17 +9,17 @@ import "./Header.css";
 import { useTranslation } from 'react-i18next';
 
 function Header(props) {
-  const { isLogged, setIsLogged, employee } = useAuth();
-  const navigate = useNavigate();
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
-  const [showMenu, setShowMenu] = useState(false);
   const { t, i18n } = useTranslation();
-
-  const updateMedia = () => {
-    setIsMobile(window.innerWidth < 1200);
-  };
+  const { isLogged, employee, logout } = useAuth();
+  const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
+    const updateMedia = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    updateMedia();
     window.addEventListener("resize", updateMedia);
     return () => window.removeEventListener("resize", updateMedia);
   }, []);
@@ -31,8 +30,7 @@ function Header(props) {
 
   const logOut = () => {
     if (window.confirm(t('Are you sure you want to logout?'))) {
-      loginService.logOut();
-      setIsLogged(false);
+      logout();
       navigate("/login");
     }
   };
@@ -40,6 +38,11 @@ function Header(props) {
   const handleAdminClick = (event) => {
     event.preventDefault();
     navigate("/admin");
+  };
+
+  const handleEmployeeClick = (event) => {
+    event.preventDefault();
+    navigate("/admin/orders"); // Employees go to orders page instead of dashboard
   };
 
   const handleProfileClick = (event) => {
@@ -72,7 +75,11 @@ function Header(props) {
                 </div>
                 {isLogged ? (
                   <div className="link-btn">
-                    <span className="welcome-admin-text">
+                    <span 
+                      className="welcome-admin-text"
+                      style={{ cursor: 'pointer' }}
+                      onClick={isAdmin ? handleAdminClick : handleEmployeeClick}
+                    >
                       <strong>
                         {isAdmin
                           ? t('Welcome Admin!')

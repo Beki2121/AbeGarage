@@ -81,10 +81,8 @@ const dbConfig = {
   database: process.env.DB_NAME,
   connectionLimit: 10,
 
-
-
 //   PLEASE DONT DELETE THIS. COMMENT OUT 
-//   socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock",
+  socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock",
 };
 
 // Create the connection pool
