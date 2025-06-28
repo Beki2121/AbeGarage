@@ -1,0 +1,139 @@
+:root {
+  --primary-color: #1a237e;
+  --accent-orange: #ff9800;
+  --accent-red: #d32f2f;
+  --accent-gray: #888;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+a, .btn-primary, .read-more {
+  color: var(--primary-color) !important;
+}
+
+.btn-primary, .service-block-one .inner-box {
+  background: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+h1, h2, h3, h4, h5 {
+  color: var(--primary-color);
+}
+
+.theme-btn.btn-style-one.blue {
+  background: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: #fff !important;
+}
+
+.theme-btn.btn-style-one {
+  background: var(--accent-orange) !important;
+  border-color: var(--accent-orange) !important;
+  color: #fff !important;
+}
+
+/* Accent for highlights */
+.highlight {
+  color: var(--accent-orange);
+}
+
+/* Accent for errors */
+.error {
+  color: var(--accent-red);
+}
+
+/* General/Home */
+a {
+  text-decoration: none !important;
+}
+/* Admin Menu */
+.admin-left-side {
+    background-color:#222b48;
+  }
+  .admin-right-side {
+    background: rgb(246 247 250);
+    border-bottom: 1px solid #dfe2ec;
+  }
+  .admin-menu {
+    background: #1e2331;
+    padding: 10px 20px;
+  }
+  .admin-left-side .list-group-item.active {
+    z-index: 2;
+    color: #fff;
+    background-color: #3c404c;
+    border-color: #3c404c;
+    border-bottom: 1px solid #616675;
+  }
+  .admin-menu h2 {
+    font-size: 21px;
+    font-weight: 300;
+    line-height: 50px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgb(249, 249, 249);
+    display: block;
+    text-decoration: none;
+  }
+  .admin-left-side.col-md-3 {
+    padding: 0;
+  }
+  .admin-left-side .list-group-item {
+    background-color: #222b48;
+    border-bottom: 1px solid #616675;
+    margin-bottom: 0px;
+    color: #fff;
+  }
+  .admin-left-side a {
+    color: #a2a5ad;
+  }
+  .admin-left-side a:hover {
+    color: #fff;
+  }
+.list-group a {
+    border: none;
+  }
+
+/* Make text white on dark backgrounds */
+.admin-left-side, .main-footer, .service-block-one .inner-box {
+  color: #fff !important;
+}
+
+.admin-left-side a, .main-footer a, .service-block-one .inner-box a, .main-footer h4, .main-footer h5, .main-footer h2, .main-footer h3, .main-footer h1 {
+  color: #fff !important;
+}
+
+/* For cards, make sure headings and icons are white */
+.service-block-one .inner-box h2, .service-block-one .inner-box h5, .service-block-one .inner-box .icon span {
+  color: #fff !important;
+}
+
+/* For footer links on hover, use accent color */
+.main-footer a:hover {
+  color: var(--accent-orange) !important;
+}
+
+/* Replace red backgrounds with Eurodiesel blue or accent orange */
+.bg-danger, .bg-red, .theme-btn.btn-style-one.red, .btn-danger {
+  background: #1a237e !important;
+  border-color: #1a237e !important;
+  color: #fff !important;
+}
+
+/* If you want to use orange for some alerts or highlights: */
+.bg-orange, .theme-btn.btn-style-one.orange {
+  background: #ff9800 !important;
+  border-color: #ff9800 !important;
+  color: #fff !important;
+}
+
+/* Ensure all service card icons are white and visible */
+.service-block-one .icon span {
+  color: #fff !important;
+  fill: #fff !important;
+  font-size: 3rem !important;
+  display: inline-block;
+}
+  

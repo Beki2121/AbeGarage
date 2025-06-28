@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+}
+
+.map-section {
+  margin-top: 60px;
+  padding-left: 25px;
+}
+
+.inner-column h4 {
+  color: #182963;
+  margin-top: 60px;
+}
+.inner-column ul li i {
+  color: rgb(218, 82, 82);
+  margin-right: 50px;
+
+  font-size: 2em;
+}
+.inner-column ul li {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.inner-column ul li h5 {
+  color: #182963;
+}

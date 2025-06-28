@@ -1,0 +1,188 @@
+
+.bgc{
+    background-color: #fff;
+    padding: 40px;
+    box-shadow: 8px 12px 12px rgba(158, 158, 158, 0.12);
+    margin: 0 !important;
+    margin-left: 100px !important;
+  }
+  
+  .pad{
+    padding: 20px 0 20px !important;
+    position: relative;
+  }
+
+  .pad_1{
+   padding-bottom: 20px !important;
+  }
+  
+  .close-btn{
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    top: -55px;
+    right: -40px;
+  }
+  
+  .mrg{
+    margin: 0 !important;
+  }
+  
+  .mrg-1{
+    margin-bottom: 50px;
+  }
+  
+  .search input{
+    border: none !important;
+    box-shadow: 8px 12px 12px rgba(158, 158, 158, 0.12);
+  }
+
+
+  .search_customer{
+    position: relative;
+  }
+
+
+  .search_btn{
+      position: absolute;
+      right: 20px;
+      top: 15px;
+  }
+
+  .search_customer input{
+    
+    border:1px solid #DDD !important;
+    box-shadow: 12px 12px 12px rgba(158, 158, 158, 0.12);
+    margin-bottom: 20px;
+  }
+
+
+  .customer_list .btns {
+    margin-bottom: 50px;
+    margin-top: 30px;
+  }
+
+  .customer_list .btns button{
+     padding: 5px 15px;
+     background-color: #fff;
+     border: 1px solid #DDD;
+     width: 120px;
+  }
+
+  .customer_name{
+    color:#081336;
+    font-weight: 550;
+  }
+
+
+  .customer_list .btns button:nth-of-type(1), .customer_list .btns button:nth-of-type(2){
+    border-right: 1px solid #DDD;
+  }
+
+  .customer_list .btns button:nth-of-type(3), .customer_list .btns button:nth-of-type(4){
+     background-color: #081336;
+     color:#fff;
+     border-right: 1px solid #fff;
+  }
+
+  .editButton{
+    color: #081336;
+    
+  }
+
+  .customer-vehicle h2{
+    font-size: 40px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    line-height: 1.4em;
+    color: #001659 !important;
+  }
+  
+  .v_title{
+    line-height: 1.4em;
+    color: #001659 !important;
+    font-weight: 550;
+  }
+  
+  .v_info p{
+    line-height: 25px;
+    margin-bottom: 0;
+  }
+
+
+  .contact_us textarea::placeholder{
+    color: #DDD;
+  }
+
+
+  .fs{
+    font-size: 12px;
+  }
+
+
+  .edit_vehicle {
+    overflow-x: hidden;
+  }
+
+  .edit_vehicle span{
+     color: #EE0D09;
+  }
+
+  .customer_label_info{
+    margin-right: 5px;
+  }
+
+  .customer_label_value{
+    color: grey !important;
+  }
+
+  .vehicle_info{
+    margin-bottom: 2rem;
+    padding: 1rem;
+    padding-top: 50px;
+    background-color: #fff;
+    /* border-radius: 4px; */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    text-align: left;
+  }
+
+  .v_font{
+    font-size: 24px !important;
+    font-weight: 700;
+  }
+
+  .service_font{
+    color:#081336 !important;
+    font-weight: 600 !important;
+    font-size: 20px !important;
+  }
+
+  
+  .header-1 {
+    /* background-color: #f8f9fa; */
+
+    transition: transform 0.3s ease-in-out;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .header-1.hidden {
+    transform: translateY(-100%);
+  }
+  
+  .header-2 {
+ 
+    transition: transform 0.3s ease-in-out;
+    z-index: 1;
+    position: relative;
+  }
+  
+  .header-2.sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000 !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
