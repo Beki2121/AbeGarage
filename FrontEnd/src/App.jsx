@@ -37,6 +37,9 @@ import OrderDetail from "./markup/pages/Admin/Orders/OrderDetailPage";
 import WorkHoursReport from "./markup/pages/Admin/WorkHoursReport";
 import EmployeeWorkHoursReport from "./markup/pages/Admin/EmployeeWorkHoursReport";
 import AdminAnnouncement from "./markup/pages/Admin/Announcement/AdminAnnouncement";
+import PermissionRequest from "./markup/pages/Employee/PermissionRequest";
+import PermissionReview from "./markup/pages/Admin/PermissionReview";
+import MaintenanceSpaces from "./markup/pages/Admin/MaintenanceSpaces";
 
 // Import the PrivateAuthRoute component
 import PrivateAuthRoute from "./markup/components/Auth/PrivateAuthRoute";
@@ -180,6 +183,30 @@ const App = () => {
           element={
             <PrivateAuthRoute roles={[3]}>
               <AdminAnnouncement />
+            </PrivateAuthRoute>
+          }
+        />
+        <Route
+          path="/employee/permission-request"
+          element={
+            <PrivateAuthRoute roles={[1]}>
+              <PermissionRequest />
+            </PrivateAuthRoute>
+          }
+        />
+        <Route
+          path="/admin/permission-review"
+          element={
+            <PrivateAuthRoute roles={[3]}>
+              <PermissionReview />
+            </PrivateAuthRoute>
+          }
+        />
+        <Route
+          path="/admin/maintenance-spaces"
+          element={
+            <PrivateAuthRoute roles={[2, 3]}>
+              <MaintenanceSpaces />
             </PrivateAuthRoute>
           }
         />

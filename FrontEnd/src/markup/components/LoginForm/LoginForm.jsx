@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import loginService from "../../../services/login.service";
 import { useAuth } from "../../../Context/AuthContext";
 import FormInput from "../../../components/common/FormInput";
@@ -74,7 +74,7 @@ function LoginForm() {
     } catch (err) {
       console.log(err);
       setServerError(
-        t('An error has occurred. Please try again later.') + err.message
+        t("An error has occurred. Please try again later.") + err.message
       );
     }
   };
@@ -82,11 +82,15 @@ function LoginForm() {
   return (
     <section className="contact-section">
       <div className="auto-container">
-        <div style={{ textAlign: 'center', marginBottom: 24 }}>
-          <img src="/eurodiesel-logo.png" alt="EURODIESEL PARMA S.p.A." style={{ height: 70 }} />
+        <div style={{ textAlign: "center", marginBottom: 24 }}>
+          <img
+            src="/eurodiesel-logo.jpg"
+            alt="EURODIESEL PARMA S.p.A."
+            style={{ height: 70 }}
+          />
         </div>
         <div className="contact-title">
-          <h2 style={{ color: '#1a237e' }}>{t('Login to your account')}</h2>
+          <h2 style={{ color: "#1a237e" }}>{t("Login to your account")}</h2>
         </div>
         <div className="row clearfix">
           <div className="form-column col-lg-7">
@@ -100,7 +104,7 @@ function LoginForm() {
                       name="employee_email"
                       value={employee_email}
                       onChange={(event) => setEmail(event.target.value)}
-                      placeholder={t('Email')}
+                      placeholder={t("Email")}
                       error={emailError}
                     />
                     <FormInput
@@ -108,11 +112,11 @@ function LoginForm() {
                       name="employee_password"
                       value={employee_password}
                       onChange={(event) => setPassword(event.target.value)}
-                      placeholder={t('Password')}
+                      placeholder={t("Password")}
                       error={passwordError}
                     />
                     <div className="form-group col-md-12">
-                      <SubmitButton>{t('Login')}</SubmitButton>
+                      <SubmitButton>{t("Login")}</SubmitButton>
                     </div>
                   </div>
                 </form>

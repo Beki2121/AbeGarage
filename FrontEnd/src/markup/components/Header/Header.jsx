@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, NavLink } from "react-router-dom";
 import loginService from "../../../services/login.service";
 import { useAuth } from "../../../Context/AuthContext";
 import Avatar from "react-avatar";
@@ -11,6 +11,10 @@ import { useTranslation } from "react-i18next";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import axios from "../../../axios/axiosConfig";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CloseIcon from "@mui/icons-material/Close";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import BuildIcon from "@mui/icons-material/Build";
 
 function Header(props) {
   const { isLogged, setIsLogged, employee } = useAuth();
@@ -18,10 +22,11 @@ function Header(props) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
   const [showMenu, setShowMenu] = useState(false);
   const { t, i18n } = useTranslation();
-  const [unreadCount, setUnreadCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [allAnnouncements, setAllAnnouncements] = useState([]);
   const [unreadAnnouncements, setUnreadAnnouncements] = useState([]);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const [showZoomModal, setShowZoomModal] = useState(false);
 
   const updateMedia = () => {
     setIsMobile(window.innerWidth < 1200);
@@ -35,14 +40,20 @@ function Header(props) {
   const fetchAnnouncements = async () => {
     if (!employee?.employee_id) return;
     try {
+      console.log("Fetching announcements for employee:", employee.employee_id);
+
       // Get all announcements
       const allRes = await axios.get(
         `/announcements/all?employee_id=${employee.employee_id}`
       );
+      console.log("All announcements response:", allRes.data);
+
       // Get unread announcements
       const unreadRes = await axios.get(
         `/announcements/unread?employee_id=${employee.employee_id}`
       );
+      console.log("Unread announcements response:", unreadRes.data);
+
       let all = Array.isArray(allRes.data)
         ? allRes.data
         : allRes.data
@@ -53,13 +64,16 @@ function Header(props) {
         : unreadRes.data
         ? [unreadRes.data]
         : [];
+
+      console.log("Processed all announcements:", all);
+      console.log("Processed unread announcements:", unread);
+
       setAllAnnouncements(all);
       setUnreadAnnouncements(unread);
-      setUnreadCount(unread.length);
     } catch (error) {
+      console.error("Error fetching announcements:", error);
       setAllAnnouncements([]);
       setUnreadAnnouncements([]);
-      setUnreadCount(0);
     }
   };
 
@@ -112,22 +126,87 @@ function Header(props) {
   // Mark all as read
   const markAllAsRead = async () => {
     if (!unreadAnnouncements.length) return;
-    await Promise.all(
-      unreadAnnouncements.map((a) =>
-        axios.post("/announcements/read", {
-          announcement_id: a.announcement_id,
-          employee_id: employee.employee_id,
-        })
-      )
+
+    console.log(
+      "Marking all as read. Unread announcements:",
+      unreadAnnouncements
     );
-    await fetchAnnouncements();
+
+    try {
+      // Use the new efficient endpoint to mark all announcements as read in one request
+      const announcement_ids = unreadAnnouncements.map(
+        (a) => a.announcement_id
+      );
+
+      console.log(
+        "Sending request to mark",
+        announcement_ids.length,
+        "announcements as read"
+      );
+
+      await axios.post("/announcements/read-multiple", {
+        announcement_ids,
+        employee_id: employee.employee_id,
+      });
+
+      console.log("All announcements marked as read successfully");
+
+      await fetchAnnouncements();
+    } catch (error) {
+      console.error("Error marking all as read:", error);
+    }
+  };
+
+  // Handle announcement click
+  const handleAnnouncementClick = (announcement) => {
+    setSelectedAnnouncement(announcement);
+    setShowZoomModal(true);
+  };
+
+  // Close zoom modal
+  const closeZoomModal = () => {
+    setShowZoomModal(false);
+    setSelectedAnnouncement(null);
+  };
+
+  // Helper function to truncate text
+  const truncateText = (text, maxLength = 150) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + "...";
+  };
+
+  // Helper function to format date
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+
+    // Reset time to compare only dates
+    const dateOnly = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+    const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    const diffTime = nowOnly - dateOnly;
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+    if (diffDays === 0) {
+      // Today - show "Today"
+      return "Today";
+    } else if (diffDays === 1) {
+      return "Yesterday";
+    } else if (diffDays < 7) {
+      return `${diffDays} days ago`;
+    } else {
+      return date.toLocaleDateString();
+    }
   };
 
   // Debug logs
   console.log("Employee:", employee);
   console.log("All announcements:", allAnnouncements);
   console.log("Unread announcements:", unreadAnnouncements);
-  console.log("Unread count:", unreadCount);
   console.log("Show modal:", showModal);
 
   return (
@@ -138,10 +217,18 @@ function Header(props) {
             <div className="inner-container">
               <div className="left-column">
                 <div className="text">
-                  {t("Relax while we get you back on the road")}
+                  <BuildIcon
+                    style={{
+                      fontSize: 20,
+                      color: "#ffffff",
+                      marginRight: 8,
+                      verticalAlign: "middle",
+                    }}
+                  />
+                  24hr Workshop Open for Emergency Service
                 </div>
                 <div className="office-hour">
-                  Monday - Saturday 7:00AM - 6:00PM
+                  Monday - Friday 8:00 - 18:30 | Saturday 8:00 - 12:00
                 </div>
               </div>
               <div className="right-column d-flex">
@@ -211,36 +298,32 @@ function Header(props) {
                         title="View notifications"
                       >
                         <NotificationsActiveIcon
-                          style={{ fontSize: 32, color: "#ffd600" }}
+                          style={{
+                            fontSize: 32,
+                            color:
+                              unreadAnnouncements.length > 0
+                                ? "#ff0000"
+                                : "#ffffff",
+                          }}
                         />
-                        {unreadCount > 0 && (
-                          <span
-                            style={{
-                              position: "absolute",
-                              top: 0,
-                              right: 0,
-                              background: "#d32f2f",
-                              color: "#fff",
-                              borderRadius: "50%",
-                              width: 18,
-                              height: 18,
-                              fontSize: 12,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              fontWeight: "bold",
-                              boxShadow: "0 0 4px #fff",
-                            }}
-                          >
-                            {unreadCount}
-                          </span>
-                        )}
                       </div>
                     )}
                   </div>
                 ) : (
                   <div className="phone-number">
-                    Schedule Appointment: <strong>1800 456 7890</strong>
+                    Schedule Appointment:{" "}
+                    <a
+                      href="tel:+390461996222"
+                      style={{
+                        color: "#ffffff",
+                        fontWeight: 700,
+                        textDecoration: "none",
+                        WebkitTextFillColor: "#ffffff",
+                        MozTextFillColor: "#ffffff",
+                      }}
+                    >
+                      +39 0461 996222
+                    </a>
                   </div>
                 )}
                 {isLogged && (
@@ -319,19 +402,144 @@ function Header(props) {
                       >
                         <ul className="navigation navbar-nav">
                           <li className="dropdown">
-                            <Link to="/">Home</Link>
+                            <NavLink
+                              to="/"
+                              className={({ isActive }) =>
+                                isActive ? "nav-link active-nav" : "nav-link"
+                              }
+                              style={{
+                                textDecoration: "none",
+                                padding: "10px 15px",
+                                borderRadius: "4px",
+                                transition: "all 0.3s ease",
+                                display: "block",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.color = "#1a237e";
+                                e.target.style.backgroundColor =
+                                  "rgba(26, 35, 126, 0.1)";
+                                e.target.style.transform = "translateY(-2px)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.color = "";
+                                e.target.style.backgroundColor = "";
+                                e.target.style.transform = "translateY(0)";
+                              }}
+                            >
+                              Home
+                            </NavLink>
                           </li>
                           <li className="dropdown">
-                            <Link to="/about">About Us</Link>
+                            <NavLink
+                              to="/about"
+                              className={({ isActive }) =>
+                                isActive ? "nav-link active-nav" : "nav-link"
+                              }
+                              style={{
+                                textDecoration: "none",
+                                padding: "10px 15px",
+                                borderRadius: "4px",
+                                transition: "all 0.3s ease",
+                                display: "block",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.color = "#1a237e";
+                                e.target.style.backgroundColor =
+                                  "rgba(26, 35, 126, 0.1)";
+                                e.target.style.transform = "translateY(-2px)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.color = "";
+                                e.target.style.backgroundColor = "";
+                                e.target.style.transform = "translateY(0)";
+                              }}
+                            >
+                              About Us
+                            </NavLink>
                           </li>
                           <li className="dropdown">
-                            <Link to="/services">Services</Link>
+                            <NavLink
+                              to="/services"
+                              className={({ isActive }) =>
+                                isActive ? "nav-link active-nav" : "nav-link"
+                              }
+                              style={{
+                                textDecoration: "none",
+                                padding: "10px 15px",
+                                borderRadius: "4px",
+                                transition: "all 0.3s ease",
+                                display: "block",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.color = "#1a237e";
+                                e.target.style.backgroundColor =
+                                  "rgba(26, 35, 126, 0.1)";
+                                e.target.style.transform = "translateY(-2px)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.color = "";
+                                e.target.style.backgroundColor = "";
+                                e.target.style.transform = "translateY(0)";
+                              }}
+                            >
+                              Services
+                            </NavLink>
                           </li>
                           <li>
-                            <Link to="/contact">Contact</Link>
+                            <NavLink
+                              to="/contact"
+                              className={({ isActive }) =>
+                                isActive ? "nav-link active-nav" : "nav-link"
+                              }
+                              style={{
+                                textDecoration: "none",
+                                padding: "10px 15px",
+                                borderRadius: "4px",
+                                transition: "all 0.3s ease",
+                                display: "block",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.color = "#1a237e";
+                                e.target.style.backgroundColor =
+                                  "rgba(26, 35, 126, 0.1)";
+                                e.target.style.transform = "translateY(-2px)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.color = "";
+                                e.target.style.backgroundColor = "";
+                                e.target.style.transform = "translateY(0)";
+                              }}
+                            >
+                              Contact
+                            </NavLink>
                           </li>
                           <li>
-                            <Link to="/admin">Dashboard</Link>
+                            <NavLink
+                              to="/admin"
+                              className={({ isActive }) =>
+                                isActive ? "nav-link active-nav" : "nav-link"
+                              }
+                              style={{
+                                textDecoration: "none",
+                                padding: "10px 15px",
+                                borderRadius: "4px",
+                                transition: "all 0.3s ease",
+                                display: "block",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.color = "#1a237e";
+                                e.target.style.backgroundColor =
+                                  "rgba(26, 35, 126, 0.1)";
+                                e.target.style.transform = "translateY(-2px)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.color = "";
+                                e.target.style.backgroundColor = "";
+                                e.target.style.transform = "translateY(0)";
+                              }}
+                            >
+                              Dashboard
+                            </NavLink>
                           </li>
                         </ul>
                       </div>
@@ -489,133 +697,315 @@ function Header(props) {
               </div>
             </div>
             <div
+              className="modal-body"
               style={{
-                width: "100%",
-                padding: "0 0 10px 0",
-                background: "#fff",
-                borderBottomLeftRadius: 18,
-                borderBottomRightRadius: 18,
+                flex: 1,
+                overflowY: "auto",
+                padding: "0",
               }}
             >
-              {!allAnnouncements || allAnnouncements.length === 0 ? (
-                <p
+              {allAnnouncements.length === 0 ? (
+                <div
                   style={{
                     textAlign: "center",
+                    padding: "40px",
                     color: "#666",
-                    fontStyle: "italic",
-                    margin: "32px 0",
                   }}
                 >
-                  No notifications.
-                </p>
+                  <NotificationsActiveIcon
+                    style={{
+                      fontSize: 48,
+                      color: "#ddd",
+                      marginBottom: "16px",
+                    }}
+                  />
+                  <p>No announcements yet</p>
+                </div>
               ) : (
-                [...allAnnouncements]
-                  .sort(
-                    (a, b) => new Date(b.created_at) - new Date(a.created_at)
-                  )
-                  .map((a, idx, arr) => {
-                    const isUnread = unreadAnnouncements.some(
-                      (u) => u.announcement_id === a.announcement_id
-                    );
-                    return (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "16px",
+                  }}
+                >
+                  {allAnnouncements.map((announcement) => (
+                    <div
+                      key={announcement.announcement_id}
+                      className="announcement-card"
+                      style={{
+                        border: "1px solid #e0e0e0",
+                        borderRadius: "12px",
+                        padding: "20px",
+                        backgroundColor: announcement.read ? "#fafafa" : "#fff",
+                        transition: "all 0.2s ease",
+                        cursor: "pointer",
+                        position: "relative",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.transform = "translateY(-2px)";
+                        e.target.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.transform = "translateY(0)";
+                        e.target.style.boxShadow = "none";
+                      }}
+                      onClick={() => handleAnnouncementClick(announcement)}
+                    >
+                      {!announcement.read && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: "12px",
+                            right: "12px",
+                            width: "8px",
+                            height: "8px",
+                            backgroundColor: "#ff0000",
+                            borderRadius: "50%",
+                          }}
+                        />
+                      )}
+
                       <div
-                        key={a.announcement_id || idx}
                         style={{
-                          margin: 0,
-                          padding: "18px 28px 12px 28px",
-                          background: isUnread ? "#e3f2fd" : "#fff",
-                          fontWeight: isUnread ? 700 : 400,
-                          cursor: isUnread ? "pointer" : "default",
-                          position: "relative",
-                          borderBottom:
-                            idx !== arr.length - 1
-                              ? "1px solid #f0f0f0"
-                              : "none",
-                          transition: "background 0.2s, font-weight 0.2s",
                           display: "flex",
-                          flexDirection: "column",
-                          gap: 2,
-                          minWidth: 250,
+                          alignItems: "flex-start",
+                          gap: "12px",
                         }}
-                        onClick={() =>
-                          isUnread && markAsRead(a.announcement_id)
-                        }
-                        title={isUnread ? "Click to mark as read" : ""}
-                        onMouseEnter={(e) =>
-                          isUnread &&
-                          (e.currentTarget.style.background = "#bbdefb")
-                        }
-                        onMouseLeave={(e) =>
-                          isUnread &&
-                          (e.currentTarget.style.background = "#e3f2fd")
-                        }
                       >
                         <div
                           style={{
+                            width: "40px",
+                            height: "40px",
+                            backgroundColor: "#007bff",
+                            borderRadius: "50%",
                             display: "flex",
                             alignItems: "center",
-                            gap: 10,
+                            justifyContent: "center",
+                            color: "white",
+                            fontSize: "16px",
+                            fontWeight: "600",
                           }}
                         >
-                          {isUnread && (
-                            <span
-                              style={{
-                                width: 10,
-                                height: 10,
-                                borderRadius: "50%",
-                                background: "#1976d2",
-                                display: "inline-block",
-                                marginRight: 4,
-                                boxShadow: "0 0 4px #1976d2",
-                              }}
-                            ></span>
-                          )}
-                          <span
+                          {announcement.title.charAt(0).toUpperCase()}
+                        </div>
+
+                        <div style={{ flex: 1 }}>
+                          <div
                             style={{
-                              color: "#1a237e",
-                              fontWeight: isUnread ? 700 : 500,
-                              fontSize: 16,
-                              letterSpacing: 0.2,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "8px",
+                              marginBottom: "8px",
                             }}
                           >
-                            {a.title || (
-                              <span style={{ color: "#d32f2f" }}>No Title</span>
-                            )}
-                          </span>
-                        </div>
-                        <span
-                          style={{
-                            margin: "4px 0 0 18px",
-                            color: "#333",
-                            fontSize: 15,
-                            fontWeight: isUnread ? 600 : 400,
-                            wordBreak: "break-word",
-                          }}
-                        >
-                          {a.message || (
-                            <span style={{ color: "#d32f2f" }}>No Message</span>
+                            <h6
+                              style={{
+                                margin: 0,
+                                fontWeight: "600",
+                                color: "#333",
+                              }}
+                            >
+                              {announcement.title}
+                            </h6>
+                            <span
+                              style={{
+                                fontSize: "12px",
+                                color: "#666",
+                                backgroundColor: "#f0f0f0",
+                                padding: "2px 8px",
+                                borderRadius: "12px",
+                              }}
+                            >
+                              {formatDate(announcement.created_at)}
+                            </span>
+                          </div>
+
+                          <p
+                            style={{
+                              margin: 0,
+                              color: "#555",
+                              lineHeight: "1.5",
+                              fontSize: "14px",
+                            }}
+                          >
+                            {truncateText(announcement.message)}
+                          </p>
+
+                          {announcement.message.length > 150 && (
+                            <button
+                              style={{
+                                background: "none",
+                                border: "none",
+                                color: "#007bff",
+                                fontSize: "14px",
+                                fontWeight: "500",
+                                cursor: "pointer",
+                                padding: "0",
+                                marginTop: "8px",
+                              }}
+                              onClick={(e) => {
+                                e.stopPropagation(); // Prevents the card click event
+                                handleAnnouncementClick(announcement);
+                              }}
+                            >
+                              Read more
+                            </button>
                           )}
-                        </span>
-                        <span
-                          style={{
-                            color: "#888",
-                            fontSize: 12,
-                            textAlign: "right",
-                            marginLeft: 18,
-                            marginTop: 2,
-                          }}
-                        >
-                          {a.created_at
-                            ? new Date(a.created_at).toLocaleString()
-                            : ""}
-                        </span>
+                        </div>
                       </div>
-                    );
-                  })
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           </div>
         </>
+      )}
+      {showZoomModal && selectedAnnouncement && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.6)",
+            zIndex: 11000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "opacity 0.3s",
+          }}
+          onClick={closeZoomModal}
+        >
+          <div
+            style={{
+              background: "#fff",
+              borderRadius: "12px",
+              maxWidth: "90vw",
+              maxHeight: "80vh",
+              overflowY: "auto",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
+              padding: "32px 24px 24px 24px",
+              position: "relative",
+              minWidth: "320px",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={closeZoomModal}
+              style={{
+                position: "absolute",
+                top: "16px",
+                right: "16px",
+                background: "none",
+                border: "none",
+                fontSize: "24px",
+                cursor: "pointer",
+                color: "#666",
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#f0f0f0",
+                transition: "all 0.2s ease",
+                zIndex: 1,
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = "#e0e0e0";
+                e.target.style.color = "#333";
+                e.target.style.transform = "scale(1.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = "#f0f0f0";
+                e.target.style.color = "#666";
+                e.target.style.transform = "scale(1)";
+              }}
+              title="Close"
+            >
+              <CloseIcon />
+            </button>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "16px",
+                marginBottom: "24px",
+              }}
+            >
+              <div
+                style={{
+                  width: "60px",
+                  height: "60px",
+                  backgroundColor: "#007bff",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "white",
+                  fontSize: "24px",
+                  fontWeight: "600",
+                }}
+              >
+                {selectedAnnouncement.title.charAt(0).toUpperCase()}
+              </div>
+
+              <div style={{ flex: 1 }}>
+                <h4
+                  style={{
+                    margin: "0 0 8px 0",
+                    fontWeight: "700",
+                    color: "#333",
+                  }}
+                >
+                  {selectedAnnouncement.title}
+                </h4>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    color: "#666",
+                    fontSize: "14px",
+                  }}
+                >
+                  <span>📅 {formatDate(selectedAnnouncement.created_at)}</span>
+                  <span>
+                    🕒{" "}
+                    {new Date(
+                      selectedAnnouncement.created_at
+                    ).toLocaleTimeString()}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div
+              style={{
+                backgroundColor: "#f8f9fa",
+                padding: "24px",
+                borderRadius: "12px",
+                borderLeft: "4px solid #007bff",
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  color: "#333",
+                  lineHeight: "1.7",
+                  fontSize: "16px",
+                  whiteSpace: "pre-wrap",
+                }}
+              >
+                {selectedAnnouncement.message}
+              </p>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

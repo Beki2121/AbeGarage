@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import emailjs from '@emailjs/browser';
+import React, { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import axios from "axios";
 
 const ContactForm = () => {
   const { t } = useTranslation();
@@ -8,28 +8,25 @@ const ContactForm = () => {
   const [messageType, setMessageType] = useState(""); // 'success' or 'error'
   const form = useRef();
 
-  const sendEmail = (e) => {
+  const sendEmail = async (e) => {
     e.preventDefault();
-
-    emailjs
-      .sendForm("service_3hyyrf6", "template_3u4m9j1", form.current, {
-        publicKey: "5WLgPbzkqKK3VxMpa",
-      })
-      .then(
-        () => {
-          console.log("SUCCESS!");
-          setMessage(t('Your message is sent successfully!'));
-          setMessageType("success");
-          setInterval(() => {
-            window.location.reload();
-          }, 3000);
-        },
-        (error) => {
-          console.log("FAILED...", error.text);
-          setMessage(t('Failed to send your message. Please try again.'));
-          setMessageType("error");
-        }
-      );
+    const formData = new FormData(form.current);
+    const data = {
+      user_name: formData.get("user_name"),
+      user_email: formData.get("user_email"),
+      message: formData.get("message"),
+    };
+    try {
+      await axios.post("http://localhost:3000/api/contact", data);
+      setMessage(t("Your message is sent successfully!"));
+      setMessageType("success");
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+    } catch (error) {
+      setMessage(t("Failed to send your message. Please try again."));
+      setMessageType("error");
+    }
   };
 
   return (
@@ -46,7 +43,7 @@ const ContactForm = () => {
     <div className="contact-section">
       <div className="auto-container">
         <div className="contact-title">
-          <h2>{t('Contact us')}</h2>
+          <h2>{t("Contact us")}</h2>
         </div>
 
         <div className="row clearfix">
@@ -67,14 +64,18 @@ const ContactForm = () => {
                 <form ref={form} onSubmit={sendEmail}>
                   <div className="row clearfix">
                     <div className="form-group col-md-12">
-                      <input type="text" name="user_name" placeholder={t('Name')} />
+                      <input
+                        type="text"
+                        name="user_name"
+                        placeholder={t("Name")}
+                      />
                     </div>
 
                     <div className="form-group col-md-12">
                       <input
                         type="email"
                         name="user_email"
-                        placeholder={t('Your Email')}
+                        placeholder={t("Your Email")}
                       />
                     </div>
 
@@ -82,7 +83,7 @@ const ContactForm = () => {
                       <textarea
                         type="text"
                         name="message"
-                        placeholder={t('Your message')}
+                        placeholder={t("Your message")}
                       />
                     </div>
 
@@ -92,9 +93,9 @@ const ContactForm = () => {
                       <button
                         className="theme-btn btn-style-one"
                         type="submit"
-                        data-loading-text={t('Please wait...')}
+                        data-loading-text={t("Please wait...")}
                       >
-                        <span>{t('SEND')}</span>
+                        <span>{t("SEND")}</span>
                       </button>
                     </div>
                   </div>
@@ -108,4 +109,4 @@ const ContactForm = () => {
   );
 };
 
-export default ContactForm
+export default ContactForm;

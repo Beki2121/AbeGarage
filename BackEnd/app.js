@@ -17,7 +17,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // ` create a port from env file
-const port = process.env.PORT || 3000; // Use a configurable port
+const port = process.env.PORT || 3001; // Use a configurable port
 
 // ` import routes
 const routes = require("./routes/index");

@@ -19,6 +19,9 @@ const employeeRoutes = require("./employee.routes");
 const orderRoutes = require("./order.routes");
 const maintenanceSpaceRoutes = require("./maintenanceSpace.routes");
 const announcementRoutes = require("./announcement.routes");
+const permissionRoutes = require("./permission.routes");
+const notificationRoutes = require("./notification.routes");
+const contactRoutes = require("./contact.routes");
 
 // =========================
 
@@ -43,5 +46,11 @@ router.use("/api", orderRoutes);
 router.use("/spaces", maintenanceSpaceRoutes);
 // Add the announcement routes to the main router
 router.use(announcementRoutes);
+// Add the permission routes to the main router
+router.use("/api/permissions", permissionRoutes);
+// Add the notification routes to the main router
+router.use("/api/notifications", notificationRoutes);
+// Add the contact routes to the main router
+router.use("/api", contactRoutes);
 
 module.exports = router;

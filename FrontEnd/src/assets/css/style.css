@@ -2223,16 +2223,25 @@ img {
   background: #f5f4f7 url(../images/resource/pattern.png);
 }
 
-.service-block-one .inner-box {
+.service-block-one {
   position: relative;
   padding: 45px 33px 40px;
   background-color: #fff;
   display: block;
+  min-height: unset !important;
+  height: auto !important;
+  overflow: visible !important;
 }
 
 .service-block-one .inner-box {
   position: relative;
   margin-bottom: 30px;
+  min-height: unset !important;
+  height: auto !important;
+  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .service-block-one h5 {
@@ -2246,7 +2255,20 @@ img {
   font-size: 26px;
   color: #001659;
   font-weight: 700;
-  margin-bottom: 50px;
+  margin-bottom: 24px;
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  display: block;
+}
+
+.service-block-one p {
+  word-break: break-word;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  margin-bottom: 0;
 }
 
 .service-block-one a {

@@ -8,6 +8,10 @@ router.get(
   announcementController.getLatestAnnouncement
 );
 router.post("/api/announcements/read", announcementController.markAsRead);
+router.post(
+  "/api/announcements/read-multiple",
+  announcementController.markMultipleAsRead
+);
 router.get(
   "/api/announcements/unread",
   announcementController.getUnreadAnnouncements

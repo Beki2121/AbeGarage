@@ -48,6 +48,37 @@ exports.markAsRead = async (req, res) => {
   }
 };
 
+// Mark multiple announcements as read
+exports.markMultipleAsRead = async (req, res) => {
+  const { announcement_ids, employee_id } = req.body;
+  try {
+    if (
+      !announcement_ids ||
+      !Array.isArray(announcement_ids) ||
+      announcement_ids.length === 0
+    ) {
+      return res
+        .status(400)
+        .json({ error: "announcement_ids array is required" });
+    }
+
+    // Create multiple INSERT IGNORE statements for all announcements
+    const values = announcement_ids.map((id) => [id, employee_id]);
+    const placeholders = announcement_ids.map(() => "(?, ?)").join(", ");
+
+    await db.query(
+      `INSERT IGNORE INTO announcement_reads (announcement_id, employee_id) VALUES ${placeholders}`,
+      values.flat()
+    );
+
+    res.json({
+      message: `Marked ${announcement_ids.length} announcements as read`,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // Get all unread announcements for an employee
 exports.getUnreadAnnouncements = async (req, res) => {
   const employee_id = req.query.employee_id;

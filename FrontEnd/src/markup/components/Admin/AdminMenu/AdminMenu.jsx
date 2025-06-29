@@ -10,6 +10,7 @@ import {
   People as CustomersIcon,
   Build as ServicesIcon,
   Campaign as CampaignIcon,
+  Garage as GarageIcon,
 } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../../Context/AuthContext";
@@ -38,7 +39,17 @@ const AdminMenu = () => {
           <ServicesIcon style={{ marginRight: 12, verticalAlign: "middle" }} />{" "}
           {t("Services")}
         </Link>
-        {/* Only show the following for managers and admins */}
+        {/* Only for employees */}
+        {role === 1 && (
+          <Link
+            to="/employee/permission-request"
+            className="list-group-item py-3"
+          >
+            <span style={{ marginRight: 12, verticalAlign: "middle" }}>📝</span>
+            Request Time Off
+          </Link>
+        )}
+        {/* Only for managers and admins */}
         {(role === 2 || role === 3) && (
           <>
             <Link to="/admin" className="list-group-item py-3">
@@ -76,6 +87,24 @@ const AdminMenu = () => {
                 style={{ marginRight: 12, verticalAlign: "middle" }}
               />{" "}
               {t("Admin Announcement")}
+            </Link>
+            <Link
+              to="/admin/maintenance-spaces"
+              className="list-group-item py-3"
+            >
+              <GarageIcon
+                style={{ marginRight: 12, verticalAlign: "middle" }}
+              />{" "}
+              {t("Maintenance Spaces")}
+            </Link>
+            <Link
+              to="/admin/permission-review"
+              className="list-group-item py-3"
+            >
+              <span style={{ marginRight: 12, verticalAlign: "middle" }}>
+                📝
+              </span>
+              Review Time Off Requests
             </Link>
           </>
         )}
